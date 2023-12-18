@@ -2,8 +2,17 @@ from flask import Flask, render_template, request, jsonify
 import test_questions
 import text_and_speech
 import subprocess
+import time
 
 app = Flask(__name__)
+
+data = {}
+
+def speak(text, default_model = "gTTS"):
+    if default_model == "espeak":
+        subprocess.call(["espeak", text])
+    elif default_model == "gTTS":
+        text_and_speech.convert_text_to_speech(text)
 
 @app.route('/')
 def index():
@@ -11,6 +20,11 @@ def index():
 
 @app.route('/start', methods=['POST', 'GET'])
 def start():
+
+    instructions = "I will ask you some questions. Please answer them to the best of your ability."
+    speak(instructions)
+    time.sleep(2)
+
     questions = [
         "What is the current year?",
         "what is the current season?",
@@ -19,15 +33,13 @@ def start():
         "What is the current month?"
     ]
 
-    return jsonify({"questions": questions})
+    for q in questions:
+        speak(q)
+        spoken_text = text_and_speech.convert_speech_to_text()
+        data[q] = spoken_text
+        print(spoken_text)
 
-@app.route('/ask_and_listen', methods=['POST', 'GET'])
-def listen():
-    data = request.get_json()
-    question = data['question']
-    subprocess.call(["espeak", question])
-    spoken_text = text_and_speech.convert_speech_to_text()
-    return jsonify({"spoken_text": spoken_text})
+    return jsonify({"questions": questions})
 
 
 if __name__ == "__main__":

@@ -10,8 +10,8 @@ function askQuestionOne() {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
-            questions = data['questions'];
-            QuestionOne();
+            // questions = data['questions'];
+            // QuestionOne();
         });
 }
 
