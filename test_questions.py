@@ -1,8 +1,9 @@
 import datetime
 import random
-random.seed()
+import requests
 
-three_things = (
+def get_three_things():
+    three_things = (
     ("car", "tree", "ball"),
     ("pencil", "moon", "shoe"),
     ("apple", "mountain", "watch"),
@@ -24,8 +25,11 @@ three_things = (
     ("whistle", "island", "desk"),
     ("chocolate", "kite", "park")
 )
+    return random.choice(three_things)
 
-reverse_words = ("APPLE","BIRD","DOG","FLOWER","GLASS","LAMP","PLATE","SONG","CAMERA","GLASS","PENCIL","CAR")
+def get_reverse_word():
+    reverse_words = ("APPLE","BIRD","DOG","FLOWER","GLASS","LAMP","PLATE","SONG","CAMERA","GLASS","PENCIL","CAR")
+    return random.choice(reverse_words)
 
 def get_season(month, day):
     if (month == 12 and day >= 21) or (month <= 2 and day <= 19):
@@ -60,7 +64,6 @@ def get_date_info_with_season():
 # date_info = get_date_info_with_season()
 # print(date_info)
 
-import requests
 
 def get_location_info():
     try:
@@ -83,8 +86,5 @@ def get_location_info():
 # Example usage:
 # location_info = get_location_info()
 # print(location_info)
-
-def get_random_thing():
-    return random.choice(three_things)
 
 

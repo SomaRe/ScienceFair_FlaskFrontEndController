@@ -1,0 +1,32 @@
+.keys-display-selected{
+    height: 100px;
+    
+}
+
+  .keyboard .col{
+    font-size: clamp(1rem, 2rem, 1.5rem);
+    background-color: #ddd;
+    max-width: 75px;
+    text-align: center;
+    color: #333;
+    border: 2px solid #2b2b2b;
+    cursor: pointer;
+    outline: none;
+    padding: 1em;
+    margin: 5px;
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out;
+    border-radius: 0.5rem;
+ }
+
+ .keyboard button:hover {
+   background-color: #ccc;
+ }
+
+ .keyboard button:focus {
+   background-color: #eef;
+ }
+
+ .keyboard button:active {
+   transform: translateY(-0.1rem) scale(0.95);
+ }
