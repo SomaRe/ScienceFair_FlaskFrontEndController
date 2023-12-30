@@ -14,26 +14,40 @@ import subprocess
 # AudioSegment.ffprobe ="C:\\Program Files\\ffmpeg-5.1.2-essentials_build\\bin\\ffprobe.exe"
 
 r = sr.Recognizer()
-r.pause_threshold = 3
+r.pause_threshold = 1
 
-def convert_speech_to_text(model = "vosk"):
+def convert_speech_to_text(model = "whisper"):
     """
     Captures audio from the microphone and returns the recognized text.
     """
     with sr.Microphone() as source:
-        audio = r.listen(source, phrase_time_limit=5)
+        repeat = False
+        # r.adjust_for_ambient_noise(source)
         while True:
+            if repeat:
+                time.sleep(0.5)
+                convert_text_to_speech("Please answer again.")
+                time.sleep(0.5)
+            audio = r.listen(source)
             try:
                 if model == "google":
-                    r.adjust_for_ambient_noise(source, duration=5)
                     text = r.recognize_google(audio)
                     if text == "":
+                        repeat = True
                         continue
                     return text
                 elif model == "vosk":
                     text = r.recognize_vosk(audio)
                     text = json.loads(text)
                     if text['text'] == "":
+                        repeat = True
+                        continue
+                    return text['text']
+                elif model == "whisper":
+                    text = r.recognize_whisper(audio)
+                    print(text)
+                    if text == "":
+                        repeat = True
                         continue
                     return text
             except Exception as e:

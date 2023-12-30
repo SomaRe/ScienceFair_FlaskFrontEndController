@@ -60,9 +60,22 @@ def get_date_info_with_season():
     date_info = get_date_info()
     return date_info
 
-# Example usage:
-# date_info = get_date_info_with_season()
-# print(date_info)
+def get_image_link():
+    image_links = {"wrist watch" : "https://i.pinimg.com/736x/11/13/0a/11130ac9de99eae78af686a9742a15e3.jpg",
+                "airplane": 'https://thumbs.dreamstime.com/b/airplane-18327587.jpg',
+                "car": 'https://vehicle-images.dealerinspire.com/stock-images/chrome/d51929e056d69529c5bf44c4ceaddf7e.png',
+                }
+    return random.choice(list(image_links.items()))
+    
+def get_words_to_click():
+    words = ['hello', 'good', 'new', 'happy', 'beautiful']
+    # return two random words
+    return random.sample(words, 2)
+
+def get_random_time():
+    hour = random.randint(1, 12)
+    minute = random.choice(range(0, 60, 5))
+    return { "hour": hour, "minute": minute }
 
 
 def get_location_info():

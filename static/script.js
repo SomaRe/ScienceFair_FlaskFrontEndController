@@ -1,10 +1,35 @@
 let currentQuestionIndex = 0;
 let questions = [];
+const simpleImg = document.getElementById("simple-img");
 
-image_links = {"wrist watch" : "https://i.pinimg.com/736x/11/13/0a/11130ac9de99eae78af686a9742a15e3.jpg",
-                "airplane": 'https://thumbs.dreamstime.com/b/airplane-18327587.jpg',
-                "car": 'https://vehicle-images.dealerinspire.com/stock-images/chrome/d51929e056d69529c5bf44c4ceaddf7e.png',
+// Clock!
+
+const hourHand = document.getElementById("hourHand");
+const minuteHand = document.getElementById("minuteHand");
+const hourAngleInput = document.getElementById("hourAngle");
+const minuteAngleInput = document.getElementById("minuteAngle");
+const hourValue = document.getElementById("hourValue");
+const minuteValue = document.getElementById("minuteValue");
+
+function updateClockHands() {
+    const hourAngle = parseInt(hourAngleInput.value);
+    const minuteAngle = parseInt(minuteAngleInput.value);
+
+    hourHand.style.transform = `translateX(-2px) translateY(-50px) rotate(${hourAngle}deg)`;
+    minuteHand.style.transform = `translateX(-1px)
+    translateY(-75px) rotate(${minuteAngle}deg)`;
+
+    hourValue.textContent = hourAngle;
+    minuteValue.textContent = minuteAngle;
 }
+
+hourAngleInput.addEventListener("input", updateClockHands);
+minuteAngleInput.addEventListener("input", updateClockHands);
+
+// Initial update
+updateClockHands();
+
+// End of clock
 
 document.getElementById("start-btn").onclick = () => {
     fetch("/start")
@@ -39,14 +64,124 @@ function group4() {
     .then((response) => response.json())
     .then((data) => {
         console.log(data);
-        group5()
+        group5_1()
     });
 }
 
-function group5() {
-    // choose a random image from image_links
-    let keys = Object.keys(image_links);
-    let random_key = keys[Math.floor(Math.random() * keys.length)];
-    let random_image = image_links[random_key];
-
+function group5_1() {
+    fetch("/group5_1")
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+        // remove class called no-display from simple-img
+        simpleImg.classList.remove("no-display");
+        simpleImg.getElementsByTagName("img")[0].src = data[1];
+        group5_2()
+    });
 }
+
+function group5_2() {
+    fetch("/group5_2")
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+        group5_1_repeat()
+    });
+}
+
+function group5_1_repeat() {
+    fetch("/group5_1_repeat")
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+        // remove class called no-display from simple-img
+        simpleImg.getElementsByTagName("img")[0].src = data[1];
+        group5_2_repeat()
+    });
+}
+
+function group5_2_repeat() {
+    fetch("/group5_2_repeat")
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+        simpleImg.classList.add("no-display");
+        group6()
+    });
+}
+
+function group6() {
+    fetch("/group6")
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+        group7_1()
+    });
+}
+
+function group7_1() {
+    fetch("/group7_1")
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+        document.querySelector('#choose-words').classList.remove('no-display')
+        document.querySelector('#choose-words-inst').innerHTML = `Click the button with the word "${data[1]}"`
+        // create two buttons inside #click-btn div woth the array from data[0]
+        let btns = ''
+        for (let i = 0; i < data[0].length; i++) {
+            btns += `<button id="btn${i}" class="btn btn-primary btn-lg m-2">${data[0][i]}</button>`
+        }
+        document.querySelector('#click-btn').innerHTML = btns
+        // group7_2()
+    });
+}
+
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.classList.contains('btn-lg')) {
+        target = e.target.innerHTML
+        fetch("/group7_2", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({target: target})
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            document.querySelector('#choose-words').classList.add('no-display')
+            group8_1()
+        });
+    }
+})
+
+function group8_1() {
+    fetch("/group8_1")
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+        document.querySelector('#clock-inst').innerHTML = `Set the clock to ${data['hour']}:${data['minute']}`
+        document.querySelector('#clock-container').classList.remove('no-display')
+    });
+}
+
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.id == 'clock-btn') {
+        // hourAngle and minuteAngle id input fields values
+        hourAngle = document.querySelector('#hourAngle').value
+        minuteAngle = document.querySelector('#minuteAngle').value
+        fetch("/group8_2", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({hour: hourAngle, minute: minuteAngle})
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            document.querySelector('#clock-container').classList.add('no-display')
+            // group9()
+        });
+    }
+})
