@@ -1,6 +1,9 @@
 let currentQuestionIndex = 0;
 let questions = [];
 const simpleImg = document.getElementById("simple-img");
+const chooseWords = document.getElementById("choose-words");
+const clockContainer = document.getElementById("clock-container");
+const drawContainer = document.getElementById("draw-container");
 
 // Clock!
 
@@ -32,6 +35,26 @@ updateClockHands();
 // End of clock
 
 document.getElementById("start-btn").onclick = () => {
+    // change start-btn class from btn-primary to btn-warning and change text to "Restart"
+    if (document.getElementById("start-btn").classList.contains("btn-primary")) {
+        document.getElementById("start-btn").classList.remove("btn-primary");
+        document.getElementById("start-btn").classList.add("btn-warning");
+        document.getElementById("start-btn").innerHTML = "Restart";
+    }
+    // set simple-img, choose-words, clock-container, draw-container classes to no-display if they don't have it already
+    if (!simpleImg.classList.contains("no-display")) {
+        simpleImg.classList.add("no-display");
+    }
+    if (!chooseWords.classList.contains("no-display")) {
+        chooseWords.classList.add("no-display");
+    }
+    if (!clockContainer.classList.contains("no-display")) {
+        clockContainer.classList.add("no-display");
+    }
+    if (!drawContainer.classList.contains("no-display")) {
+        drawContainer.classList.add("no-display");
+    }
+
     fetch("/start")
     .then((response) => response.json())
     .then((data) => {
@@ -73,10 +96,15 @@ function group5_1() {
     .then((response) => response.json())
     .then((data) => {
         console.log(data);
-        // remove class called no-display from simple-img
-        simpleImg.classList.remove("no-display");
-        simpleImg.getElementsByTagName("img")[0].src = data[1];
-        group5_2()
+        // if data['status] exists, do not call group5_2()
+        if (data['status']) {
+            group6()
+        }
+        else{
+            simpleImg.classList.remove("no-display");
+            simpleImg.getElementsByTagName("img")[0].src = data[1];
+            group5_2()
+        }
     });
 }
 
@@ -124,15 +152,19 @@ function group7_1() {
     .then((response) => response.json())
     .then((data) => {
         console.log(data);
-        document.querySelector('#choose-words').classList.remove('no-display')
-        document.querySelector('#choose-words-inst').innerHTML = `Click the button with the word "${data[1]}"`
-        // create two buttons inside #click-btn div woth the array from data[0]
-        let btns = ''
-        for (let i = 0; i < data[0].length; i++) {
-            btns += `<button id="btn${i}" class="btn btn-primary btn-lg m-2">${data[0][i]}</button>`
+        if (data['status']) {
+            group8_1()
         }
-        document.querySelector('#click-btn').innerHTML = btns
-        // group7_2()
+        else{
+            document.querySelector('#choose-words').classList.remove('no-display')
+            document.querySelector('#choose-words-inst').innerHTML = `Click the button with the word "${data[1]}"`
+            // create two buttons inside #click-btn div woth the array from data[0]
+            let btns = ''
+            for (let i = 0; i < data[0].length; i++) {
+                btns += `<button id="btn${i}" class="btn btn-primary btn-lg m-2">${data[0][i]}</button>`
+            }
+            document.querySelector('#click-btn').innerHTML = btns
+        }
     });
 }
 
@@ -160,8 +192,13 @@ function group8_1() {
     .then((response) => response.json())
     .then((data) => {
         console.log(data);
+        if (data['status']) {
+            group9()
+        }
+        else{
         document.querySelector('#clock-inst').innerHTML = `Set the clock to ${data['hour']}:${data['minute']}`
         document.querySelector('#clock-container').classList.remove('no-display')
+        }
     });
 }
 
@@ -196,7 +233,6 @@ function group9() {
 }
 
 function group10() {
-    // remove class called no-display from draw-container
     document.querySelector('#draw-container').classList.remove('no-display')
 
 }

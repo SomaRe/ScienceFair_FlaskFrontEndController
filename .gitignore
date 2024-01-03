@@ -5,3 +5,4 @@ model
 output.mp3
 results.json
 reports
+config.json
