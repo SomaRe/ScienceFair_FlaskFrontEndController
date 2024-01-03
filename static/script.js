@@ -181,7 +181,131 @@ document.addEventListener('click', function(e) {
         .then((data) => {
             console.log(data);
             document.querySelector('#clock-container').classList.add('no-display')
-            // group9()
+            group9()
         });
     }
 })
+
+function group9() {
+    fetch("/group9")
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+        group10()
+    });
+}
+
+function group10() {
+    // remove class called no-display from draw-container
+    document.querySelector('#draw-container').classList.remove('no-display')
+
+}
+
+// drawing
+var width = window.innerWidth;
+var height = window.innerHeight - 25;
+
+// first we need Konva core things: stage and layer
+var stage = new Konva.Stage({
+container: 'canvas-container',
+width: 600,
+height: 500,
+});
+
+var layer = new Konva.Layer();
+stage.add(layer);
+
+var isPaint = false;
+var mode = 'brush';
+var lastLine;
+
+stage.on('mousedown touchstart', function (e) {
+isPaint = true;
+var pos = stage.getPointerPosition();
+    lastLine = new Konva.Line({
+        stroke: '#000',
+        strokeWidth: 5,
+        globalCompositeOperation:
+        mode === 'brush' ? 'source-over' : 'destination-out',
+        // round cap for smoother lines
+        lineCap: 'round',
+        lineJoin: 'round',
+        // add point twice, so we have some drawings even on a simple click
+        points: [pos.x, pos.y, pos.x, pos.y],
+    });
+    layer.add(lastLine);
+});
+
+stage.on('mouseup touchend', function () {
+    isPaint = false;
+});
+
+// and core function - drawing
+stage.on('mousemove touchmove', function (e) {
+    if (!isPaint) {
+        return;
+    }
+
+    // prevent scrolling on touch devices
+    e.evt.preventDefault();
+
+    const pos = stage.getPointerPosition();
+    var newPoints = lastLine.points().concat([pos.x, pos.y]);
+    lastLine.points(newPoints);
+});
+
+
+// ... [Your existing code]
+
+// Clear Canvas Function
+function clearCanvas() {
+    layer.removeChildren();
+    layer.draw();
+}
+
+// Save Canvas as Image Function
+function saveCanvasAsImage() {
+    var tempCanvas = document.createElement('canvas');
+    tempCanvas.width = stage.width();
+    tempCanvas.height = stage.height();
+
+    var tempContext = tempCanvas.getContext('2d');
+
+    // Draw a white background
+    tempContext.fillStyle = '#FFFFFF'; // White color
+    tempContext.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+    // Draw the original canvas content on top of the white background
+    tempContext.drawImage(stage.toCanvas(), 0, 0);
+
+    // Convert to Data URL
+    var dataURL = tempCanvas.toDataURL("image/png");
+    // send dataURL to server
+    fetch("/group10", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({dataURL: dataURL})
+    })
+}
+
+// Download URI Function
+function downloadURI(data, filename) {
+    var a = document.createElement('a');
+    a.setAttribute('download', filename);
+    a.setAttribute('href', data);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+// Clear Canvas Button Event Listener
+document.getElementById('clear-canvas-btn').addEventListener('click', function () {
+    clearCanvas();
+});
+
+// Submit Drawing Button Event Listener
+document.getElementById('submit-drawing-btn').addEventListener('click', function () {
+    saveCanvasAsImage();
+});

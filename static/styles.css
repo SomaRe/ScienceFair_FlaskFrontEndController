@@ -108,3 +108,7 @@ hr{
 input[type="range"] {
   width: 100%;
 }
+
+#canvas-container{
+  border: 2px solid #2b2b2b;
+}

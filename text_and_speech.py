@@ -72,7 +72,6 @@ def play_audio(filename):
     play(audio)
 
 
-
 if __name__ == "__main__":
     spoken_text = convert_speech_to_text()
     print(spoken_text)
