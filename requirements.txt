@@ -5,5 +5,5 @@ pydub
 flask
 gTTS
 requests
-openai
+openai==0.28
 vosk
