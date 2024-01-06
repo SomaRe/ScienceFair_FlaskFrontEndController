@@ -1,6 +1,10 @@
 import datetime
 import random
 import requests
+from openai import OpenAI
+import base64
+import requests
+from KEYS import OPENAI_API_KEY
 
 def get_three_things():
     three_things = (
@@ -95,6 +99,43 @@ def get_location_info():
             "Country": "Unknown",
             "State": "Unknown",
         }
+
+def encode_image(image_path):
+  with open(image_path, "rb") as image_file:
+    return base64.b64encode(image_file.read()).decode('utf-8')
+
+def get_drawing_score(encoded):
+    main_image = encode_image("static/image.png")
+    client = OpenAI(api_key = OPENAI_API_KEY)
+    response = client.chat.completions.create(
+        model="gpt-4-vision-preview",
+        messages=[{
+        "role": "user",
+        "content": [
+            {
+            "type": "text",
+            "text": "First image is a drawing, second image is a actual photo containing 2 pentagons, overlapped on one side, lets call it main image. please tell if the drawing resembeles the main image. score it 1 if all 10 sides present and its overlapping on one side, score it 0 if its not score is 0, no partial score. also please use the this format, {score: 1, description: 'all 10 sides present and its overlapping on one side'} only, follow this json strictly, dont give me any other information, just this json.",
+            },
+            {
+            "type": "image_url",
+            "image_url": {
+                "url": f"data:image/png;base64,{encoded}",
+            },
+            },
+            {
+            "type": "image_url",
+            "image_url": {
+                "url": f"data:image/png;base64,{main_image}",
+            },
+            },
+        ],
+        }
+    ],
+    max_tokens=100,
+    )
+    print(response.choices[0].message.content)
+    # return response.choices[0].message.content
+
 
 # Example usage:
 # location_info = get_location_info()

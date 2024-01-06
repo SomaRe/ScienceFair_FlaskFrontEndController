@@ -296,17 +296,28 @@ def group9():
 
     return jsonify(data)
 
-@app.route('/group10', methods=['POST', 'GET'])
-def group10():
+
+@app.route('/group10_1', methods=['POST', 'GET'])
+def group10_1():
     if config['enable_group10']:
         instructions = "Please draw a picture shown on the left side of the screen on to the right side of the screen."
         speak(instructions)
+        return jsonify({"status": "group10 is enabled"})
+    else:
+        return jsonify({"status": "group10 is disabled"})
+
+
+@app.route('/group10', methods=['POST', 'GET'])
+def group10():
+    if config['enable_group10']:
         if request.method == 'POST':
             global drawing_data
             r = request.get_json()
             data_url = r['dataURL']
             header, encoded = data_url.split(",", 1)
             drawing_data = base64.b64decode(encoded)
+
+            score, description = test_questions.get_drawing_score(encoded)
             
             if config['enable_save_data']:
                 save_data_to_file()

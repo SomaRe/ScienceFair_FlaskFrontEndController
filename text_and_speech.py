@@ -28,7 +28,7 @@ def convert_speech_to_text(model = "whisper"):
                 time.sleep(0.5)
                 convert_text_to_speech("Please answer again.")
                 time.sleep(0.5)
-            audio = r.listen(source)
+            audio = r.listen(source, phrase_time_limit=10)
             try:
                 if model == "google":
                     text = r.recognize_google(audio)

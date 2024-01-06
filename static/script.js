@@ -234,6 +234,11 @@ function group9() {
 
 function group10() {
     document.querySelector('#draw-container').classList.remove('no-display')
+    fetch("/group10_1")
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+    });
 
 }
 
