@@ -55,13 +55,20 @@ document.getElementById("start-btn").onclick = () => {
         drawContainer.classList.add("no-display");
     }
 
-    fetch("/start")
-    .then((response) => response.json())
-    .then((data) => {
-        console.log(data);
-        // wait for 2 seconds before calling group2()
-        setTimeout(group2, 2000);
-    });
+    if (document.getElementById("start-btn").classList.contains("btn-primary")) {
+        // reload the page
+        location.reload();
+    }
+    else{
+        fetch("/start")
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            // wait for 2 seconds before calling group2()
+            setTimeout(group2, 2000);
+        });
+    }
+
 };
 
 function group2() {
