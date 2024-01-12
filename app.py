@@ -93,11 +93,11 @@ def start():
             "What is the date today?",
             "What is the current day of the week?",
             "What is the current month?",
-            "What country are we in?",
-            "What county are we in?",
-            "What city are we in?",
-            "What is the name or address of this building?",
-            "What floor of the building are we on?",
+            # "What country are we in?",
+            # "What county are we in?",
+            # "What city are we in?",
+            # "What is the name or address of this building?",
+            # "What floor of the building are we on?",
         ]
 
         for q in questions:
@@ -149,16 +149,13 @@ def group3():
 @app.route('/group4', methods=['POST', 'GET'])
 def group4():
     if config['enable_group4']:
-        instruction = "Now I am going to give you a word, and I want you to say it backwards."
+        instruction = "Can you repeat the three things I asked you to remember earlier?"
         speak(instruction)
-        time.sleep(1)
-        word = test_questions.get_reverse_word()
-        speak("The word is: " + word)
 
         spoken_text = text_and_speech.convert_speech_to_text()
-        data['reverse_word'] = {
-            'spoken_text': spoken_text.replace(" ", ""),
-            'correct': word[::-1]
+        data['three_things_repeat'] = {
+            'spoken_text': spoken_text,
+            'correct': " ".join(three_things)
         }
 
     return jsonify(data)
@@ -318,6 +315,10 @@ def group10():
             drawing_data = base64.b64decode(encoded)
 
             score, description = test_questions.get_drawing_score(encoded)
+            data['drawing'] = {
+                'score': score,
+                'description': description
+            }
             
             if config['enable_save_data']:
                 save_data_to_file()

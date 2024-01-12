@@ -1,5 +1,6 @@
 import datetime
 import random
+import json
 import requests
 from openai import OpenAI
 import base64
@@ -81,7 +82,6 @@ def get_random_time():
     minute = random.choice(range(0, 60, 5))
     return { "hour": hour, "minute": minute }
 
-
 def get_location_info():
     try:
         response = requests.get("https://ipinfo.io/json")
@@ -114,7 +114,7 @@ def get_drawing_score(encoded):
         "content": [
             {
             "type": "text",
-            "text": "First image is a drawing, second image is a actual photo containing 2 pentagons, overlapped on one side, lets call it main image. please tell if the drawing resembeles the main image. score it 1 if all 10 sides present and its overlapping on one side, score it 0 if its not score is 0, no partial score. also please use the this format, {score: 1, description: 'all 10 sides present and its overlapping on one side'} only, follow this json strictly, dont give me any other information, just this json.",
+            "text": 'First image is a drawing, second image is a actual photo containing 2 pentagons, overlapped on one side, lets call it main image. please tell if the drawing resembeles the main image. score it 1 if all 10 sides present and its overlapping on one side, score it 0 if its not score is 0, no partial score. Write description of what you see, also please use the this format, example 1: {score: 1, description: "all 10 sides present and its overlapping on one side"}, example 2: {score: 0, description: "This image has a circle and a square, and it doesnt resemble main image, only 4 straight sides"}, follow this json strictly, dont give me any other information, just make sure its valid json.',
             },
             {
             "type": "image_url",
@@ -133,12 +133,11 @@ def get_drawing_score(encoded):
     ],
     max_tokens=100,
     )
-    print(response.choices[0].message.content)
-    # return response.choices[0].message.content
-
-
-# Example usage:
-# location_info = get_location_info()
-# print(location_info)
-
+    content = response.choices[0].message.content
+    print(content[content.find("{"):content.find("}")+1])
+    content = content[content.find("{"):content.find("}")+1]
+    # convert content to json and return score, description
+    score, description = json.loads(content)['score'], json.loads(content)['description']
+    print(score, description)
+    return score, description
 
