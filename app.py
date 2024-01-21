@@ -23,10 +23,10 @@ drawing_data = ""
 def save_data_to_file():
     folder_name = str(datetime.datetime.now())
     # create folders folder if it doesn't exist
-    if not os.path.exists('folders'):
-        os.mkdir('folders')
+    if not os.path.exists('reports'):
+        os.mkdir('reports')
     
-    os.mkdir('folders/' + folder_name)
+    os.mkdir('reports/' + folder_name)
 
     # step2: save the data in that folder
     results = {}
@@ -58,7 +58,6 @@ def read_config_file():
     else:
         with open(config_path, 'r') as f:
             return json.load(f)
-
 
 def speak(text, default_model = "gTTS"):
     if default_model == "espeak":
