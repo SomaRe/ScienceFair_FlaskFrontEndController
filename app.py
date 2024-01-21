@@ -31,9 +31,9 @@ def save_data_to_file():
     # step2: save the data in that folder
     results = {}
     results[str(datetime.datetime.now())] = data
-    with open('folders/' + folder_name + '/results.json', 'w') as f:
+    with open('reports/' + folder_name + '/results.json', 'w') as f:
         json.dump(results, f, indent=4)
-    with open('folders/' + folder_name + '/drawing.png', 'wb') as f:
+    with open('reports/' + folder_name + '/drawing.png', 'wb') as f:
         f.write(drawing_data)
 
 def read_config_file():
