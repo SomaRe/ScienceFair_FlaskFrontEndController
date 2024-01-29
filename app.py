@@ -105,6 +105,9 @@ def start():
         for q in range(len(questions)):
             speak(questions[q])
             spoken_text = text_and_speech.convert_speech_to_text()
+            if list(right_answers.keys())[q] == "Year":
+                # extract text, remove all non-numeric characters
+                spoken_text = "".join([c for c in spoken_text if c.isdigit()])
             data[list(right_answers.keys())[q]] = { "question" : questions[q], "spoken_text": spoken_text, "correct": list(right_answers.values())[q]}
 
     return jsonify({"data": data})
@@ -141,6 +144,7 @@ def group3():
         speak("The word is: " + word)
 
         spoken_text = text_and_speech.convert_speech_to_text()
+        spoken_text = "".join([c for c in spoken_text if c.isalpha()])
         data['reverse_word'] = {
             'spoken_text': spoken_text.replace(" ", ""),
             'correct': word[::-1]

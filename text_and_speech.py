@@ -44,9 +44,9 @@ def convert_speech_to_text(model = "whisper"):
                         continue
                     return text['text']
                 elif model == "whisper":
-                    text = r.recognize_whisper_api(audio, model='whisper-1' , api_key=KEYS.OPENAI_API_KEY)
+                    text = str(r.recognize_whisper_api(audio, model='whisper-1' , api_key=KEYS.OPENAI_API_KEY))
                     print(text)
-                    if len(str(text)) < 3:
+                    if len(text) < 3:
                         repeat = True
                         continue
                     # return text by removing \n at the end if present

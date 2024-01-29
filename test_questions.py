@@ -178,46 +178,46 @@ def process_report(report):
             needs_scoring = True
             spoken_text = str(value.get('spoken_text', '')).strip()
             correct_answer = value.get('correct')
-            prompt = f"Score the response '{spoken_text}' against the correct answer '{correct_answer}'. Provide a score of 1 for correct and 0 for incorrect. be liberal in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording, like date and month might contain more info or in different format, like numbers for month or more words than necessary, since it can be a sentence. if correct answer presents in the spoken text, give it a 1."
+            prompt = f"Score the response '{spoken_text.lower()}' against the correct answer '{correct_answer.lower()}'. Provide a score of 1 for correct and 0 for incorrect. be liberal in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording, like date and month might contain more info or in different format, like numbers for month or more words than necessary, since it can be a sentence. if correct answer presents in the spoken text, give it a 1."
 
         elif key == "three_things":
             # Similar straightforward comparison, but the response might be a list
             needs_scoring = True
             spoken_text = " ".join(value.get('spoken_text', '').strip().split())
             correct_answer = value.get('correct')
-            prompt = f"Score the response '{spoken_text}' against the correct answer '{correct_answer}'. Provide a score of 1 for correct and 0 for incorrect. Be liberal, this is from voice recordings, so if the answer is close to correct, give it a 1. if correct answer presents in the spoken text also give it a 1. just check if three things are present"
+            prompt = f"Score the response '{spoken_text.lower()}' against the correct answer '{correct_answer.lower()}'. Provide a score of 1 for correct and 0 for incorrect. Be liberal, this is from voice recordings, so if the answer is close to correct, give it a 1. if correct answer presents in the spoken text also give it a 1. just check if three things are present"
 
         elif key == "reverse_word":
             # Scoring for reversed word
             needs_scoring = True
             spoken_text = value.get('spoken_text', '').strip().replace(",", "").replace(" ", "")
             correct_answer = value.get('correct')
-            prompt = f"Score the response '{spoken_text}' against the correct answer '{correct_answer}'. Provide a score of 1 for correct and 0 for incorrect. be lenient in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording using SST module therefore it won't be straigh, may contain punctuations and etc, just ignore them."
+            prompt = f"Score the response '{spoken_text.lower()}' against the correct answer '{correct_answer.lower()}'. Provide a score of 1 for correct and 0 for incorrect. be lenient in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording using SST module therefore it won't be straigh, may contain punctuations and etc, just ignore them."
 
 
         if key == "three_things_repeat":
             needs_scoring = True
             spoken_text = " ".join(value.get('spoken_text', '').strip().split())
             correct_answer = value.get('correct')
-            prompt = f"Score the response '{spoken_text}' against the correct answer '{correct_answer}' with 1 or 0. Be liberal in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording, just check if three things are present"
+            prompt = f"Score the response '{spoken_text.lower()}' against the correct answer '{correct_answer.lower()}' with 1 or 0. Be liberal in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording, just check if three things are present"
 
         elif key in ["image1", "image2"]:
             needs_scoring = True
             spoken_text = value.get('spoken_text', '').strip()
             correct_answer = value.get('correct')
-            prompt = f"Score the response '{spoken_text}' against the correct answer '{correct_answer}' with 1 or 0. Be liberal in scoring, if the answer is close to correct or even contains the word, give it a 1. as this is taken from voice recording"
+            prompt = f"Score the response '{spoken_text.lower()}' against the correct answer '{correct_answer.lower()}' with 1 or 0. Be liberal in scoring, if the answer is close to correct or even contains the word, give it a 1. as this is taken from voice recording"
 
         elif key == "phrase":
             needs_scoring = True
             spoken_text = value.get('spoken_text', '').strip()
             correct_answer = value.get('correct')
-            prompt = f"Score the response '{spoken_text}' against the correct answer '{correct_answer}' with 1 or 0. Be liberal in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording the punctuation is not important, but the words are important"
+            prompt = f"Score the response '{spoken_text.lower()}' against the correct answer '{correct_answer.lower()}' with 1 or 0. Be liberal in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording the punctuation is not important, but the words are important"
 
         elif key == "words":
             needs_scoring = True
             chosen_word = value.get('chosen_word', '').strip()
             correct_word = value.get('correct')
-            prompt = f"Score the chosen word '{chosen_word}' against the correct word '{correct_word}'. with 1 or 0. Be liberal in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording"
+            prompt = f"Score the chosen word '{chosen_word.lower()}' against the correct word '{correct_word.lower()}'. with 1 or 0. Be liberal in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording"
 
         elif key == "clock":
             needs_scoring = True
@@ -230,7 +230,7 @@ def process_report(report):
         elif key == "sentence":
             needs_scoring = True
             spoken_text = value.get('spoken_text', '').strip()
-            prompt = f"Analyze the sentence '{spoken_text}' and score 1 if it contains at least one noun and one verb, otherwise score 0. this is taken from voice recording using STT, so please be understanding."
+            prompt = f"Analyze the sentence '{spoken_text.lower()}' and score 1 if it contains at least one noun and one verb, otherwise score 0. this is taken from voice recording using STT, so please be understanding."
 
 
         if needs_scoring:
