@@ -22,7 +22,7 @@ drawing_data = ""
 
 def save_data_to_file():
     folder_name = str(datetime.datetime.now())
-    # create folders folder if it doesn't exist
+    # create freports folder if it doesn't exist
     if not os.path.exists('reports'):
         os.mkdir('reports')
     
@@ -31,6 +31,7 @@ def save_data_to_file():
     # step2: save the data in that folder
     results = {}
     results[str(datetime.datetime.now())] = data
+    results = test_questions.process_mmse_report(results)
     with open('reports/' + folder_name + '/results.json', 'w') as f:
         json.dump(results, f, indent=4)
     with open('reports/' + folder_name + '/drawing.png', 'wb') as f:
@@ -88,10 +89,10 @@ def start():
 
         questions = [
             "What is the current year?",
-            "what is the current season?",
+            "What is the current month?",
             "What is the date today?",
             "What is the current day of the week?",
-            "What is the current month?",
+            "what is the current season?",
             # "What country are we in?",
             # "What county are we in?",
             # "What city are we in?",
@@ -99,10 +100,12 @@ def start():
             # "What floor of the building are we on?",
         ]
 
-        for q in questions:
-            speak(q)
+        right_answers = test_questions.get_date_info()
+
+        for q in range(len(questions)):
+            speak(questions[q])
             spoken_text = text_and_speech.convert_speech_to_text()
-            data[q] = spoken_text
+            data[list(right_answers.keys())[q]] = { "question" : questions[q], "spoken_text": spoken_text, "correct": list(right_answers.values())[q]}
 
     return jsonify({"data": data})
 
@@ -329,7 +332,6 @@ def group10():
         if config['enable_save_data']:
             save_data_to_file()
         return jsonify({"status": "group10 is disabled"})
-
 
 
 if __name__ == "__main__":

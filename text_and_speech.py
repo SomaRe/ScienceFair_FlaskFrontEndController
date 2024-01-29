@@ -14,7 +14,7 @@ import subprocess
 # AudioSegment.ffprobe ="C:\\Program Files\\ffmpeg-5.1.2-essentials_build\\bin\\ffprobe.exe"
 
 r = sr.Recognizer()
-r.pause_threshold = 1
+r.pause_threshold = 3
 
 def convert_speech_to_text(model = "whisper"):
     """
@@ -46,10 +46,11 @@ def convert_speech_to_text(model = "whisper"):
                 elif model == "whisper":
                     text = r.recognize_whisper_api(audio, model='whisper-1' , api_key=KEYS.OPENAI_API_KEY)
                     print(text)
-                    if text == "":
+                    if len(str(text)) < 3:
                         repeat = True
                         continue
-                    return text
+                    # return text by removing \n at the end if present
+                    return text[:-1] if text[-1] == "\n" else text
             except Exception as e:
                 print(f"Error: {e}")
                 

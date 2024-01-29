@@ -4,6 +4,7 @@ const simpleImg = document.getElementById("simple-img");
 const chooseWords = document.getElementById("choose-words");
 const clockContainer = document.getElementById("clock-container");
 const drawContainer = document.getElementById("draw-container");
+const endContainer = document.getElementById("end-container");
 
 // Clock!
 
@@ -54,6 +55,9 @@ document.getElementById("start-btn").onclick = () => {
     if (!drawContainer.classList.contains("no-display")) {
         drawContainer.classList.add("no-display");
     }
+    if (!endContainer.classList.contains("no-display")) {
+        endContainer.classList.add("no-display");
+    }
 
     if (document.getElementById("start-btn").classList.contains("btn-primary")) {
         // reload the page
@@ -68,6 +72,7 @@ document.getElementById("start-btn").onclick = () => {
             setTimeout(group2, 2000);
         });
     }
+    clearCanvas();
 
 };
 
@@ -302,9 +307,6 @@ stage.on('mousemove touchmove', function (e) {
     lastLine.points(newPoints);
 });
 
-
-// ... [Your existing code]
-
 // Clear Canvas Function
 function clearCanvas() {
     layer.removeChildren();
@@ -356,4 +358,6 @@ document.getElementById('clear-canvas-btn').addEventListener('click', function (
 // Submit Drawing Button Event Listener
 document.getElementById('submit-drawing-btn').addEventListener('click', function () {
     saveCanvasAsImage();
+    drawContainer.classList.add("no-display");
+    endContainer.classList.remove("no-display");
 });
