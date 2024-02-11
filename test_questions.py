@@ -177,7 +177,7 @@ def process_report(report):
             # These are straightforward comparisons
             needs_scoring = True
             spoken_text = str(value.get('spoken_text', '')).strip()
-            correct_answer = value.get('correct')
+            correct_answer = str(value.get('correct'))
             prompt = f"Score the response '{spoken_text.lower()}' against the correct answer '{correct_answer.lower()}'. Provide a score of 1 for correct and 0 for incorrect. be liberal in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording, like date and month might contain more info or in different format, like numbers for month or more words than necessary, since it can be a sentence. if correct answer presents in the spoken text, give it a 1."
 
         elif key == "three_things":
