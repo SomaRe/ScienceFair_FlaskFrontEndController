@@ -155,7 +155,7 @@ def get_gpt_score(prompt):
     )
 
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
+        model="gpt-4-0613",
         response_format={"type": "json_object"},
         messages=[
             {"role": "system", "content": "You are a helpful assistant designed to score MMSE TEST that is voice recorded and captured using a not so great Speech to text, you were meant to be smart and understand and act as NLP so that evaluation might be fair, ignore punctuations, backslash n and etc, also output JSON. Please respond with a valid JSON object. "},
