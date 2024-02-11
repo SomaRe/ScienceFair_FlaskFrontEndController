@@ -31,7 +31,10 @@ def save_data_to_file():
     # step2: save the data in that folder
     results = {}
     results[str(datetime.datetime.now())] = data
-    results = test_questions.process_mmse_report(results)
+    try:
+        results = test_questions.process_mmse_report(results)
+    except Exception as e:
+        print(f"Error: {e}")
     with open('reports/' + folder_name + '/results.json', 'w') as f:
         json.dump(results, f, indent=4)
     with open('reports/' + folder_name + '/drawing.png', 'wb') as f:
