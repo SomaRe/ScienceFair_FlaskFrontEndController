@@ -155,10 +155,10 @@ def get_gpt_score(prompt):
     )
 
     response = client.chat.completions.create(
-        model="gpt-4-0613",
+        model="gpt-4-turbo-preview",
         response_format={"type": "json_object"},
         messages=[
-            {"role": "system", "content": "You are a helpful assistant designed to score MMSE TEST that is voice recorded and captured using a not so great Speech to text, you were meant to be smart and understand and act as NLP so that evaluation might be fair, ignore punctuations, backslash n and etc, also output JSON. Please respond with a valid JSON object. "},
+            {"role": "system", "content": "You are a helpful assistant designed to score MMSE TEST that is voice recorded and captured using a not so great Speech to text, you were meant to be smart and understand and act as NLP so that evaluation might be fair, ignore punctuations, backslash n and etc, also output JSON. one of them is `score` and other is `explanation` Please respond with a valid JSON object. "},
             {"role": "user", "content": prompt}
         ]
     )
@@ -236,7 +236,9 @@ def process_report(report):
         if needs_scoring:
             json_response = get_gpt_score(prompt)
             score = json_response.get("score", 0)
+            explanation = json_response.get("explanation", "")
             report[key]['score'] = score
+            report[key]['explanation'] = explanation
             total_score += score
 
     report['total_score'] = total_score
@@ -245,6 +247,144 @@ def process_mmse_report(results):
     process_report(next(iter(results.values())))
     print(json.dumps(results, indent=4))
     return results
+
+
+
+def generate_html(data):
+    html_content = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMSE Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Mini-Mental State Examination (MMSE) Report</h1>
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="grid grid-cols-1 gap-4">
+    """
+    
+    for date, sections in data.items():
+        for section, details in sections.items():
+            if section == "total_score":
+                html_content += f'<div class="mt-4"><h3 class="text-lg font-semibold text-gray-700">Total Score: {details}</h3></div>'
+            else:
+                html_content += f'<div class="border-b pb-4"><h2 class="text-xl font-semibold text-gray-700">{section}</h2>'
+                for key, value in details.items():
+                    if key not in ['score', 'description']:  # Adjust based on your JSON structure
+                        html_content += f'<p><strong>{key.capitalize()}:</strong> {value}</p>'
+                if 'score' in details:
+                    html_content += f'<p><strong>Score:</strong> {details["score"]}</p>'
+                html_content += '</div>'
+    
+    html_content += """
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+    """
+    return html_content
+
+j = {
+    "2024-01-29 00:37:57.452163": {
+        "Year": {
+            "question": "What is the current year?",
+            "spoken_text": "2024",
+            "correct": 2024,
+            "score": 1
+        },
+        "Month": {
+            "question": "What is the current month?",
+            "spoken_text": "January.",
+            "correct": "January",
+            "score": 1
+        },
+        "Day": {
+            "question": "What is the date today?",
+            "spoken_text": "29th",
+            "correct": 29,
+            "score": 1
+        },
+        "DayOfWeek": {
+            "question": "What is the current day of the week?",
+            "spoken_text": "Monday.",
+            "correct": "Monday",
+            "score": 1
+        },
+        "Season": {
+            "question": "what is the current season?",
+            "spoken_text": "winter",
+            "correct": "Winter",
+            "score": 0
+        },
+        "three_things": {
+            "spoken_text": "phone, sweater, lake.",
+            "correct": "phone sweater lake",
+            "score": 1
+        },
+        "reverse_word": {
+            "spoken_text": "G.O.D.",
+            "correct": "GOD",
+            "score": 1
+        },
+        "three_things_repeat": {
+            "spoken_text": "phone, sweater, leg.",
+            "correct": "phone sweater lake",
+            "score": 1
+        },
+        "image1": {
+            "spoken_text": "airplane.",
+            "correct": "airplane",
+            "score": 1
+        },
+        "image2": {
+            "spoken_text": "car",
+            "correct": "car",
+            "score": 1
+        },
+        "phrase": {
+            "spoken_text": "No ifs, ands, or buts.",
+            "correct": "No ifs, ands, or buts",
+            "score": 1
+        },
+        "words": {
+            "chosen_word": "happy",
+            "correct": "happy",
+            "score": 0
+        },
+        "clock": {
+            "time": {
+                "hour": 11,
+                "minute": 25
+            },
+            "correct": {
+                "hour": 11,
+                "minute": 25
+            },
+            "score": 1
+        },
+        "sentence": {
+            "spoken_text": "I like computer programming.",
+            "score": 1
+        },
+        "drawing": {
+            "score": 1,
+            "description": "all 10 sides present and its overlapping on one side"
+        },
+        "total_score": 12
+    }
+}
+
+# h = generate_html(j)
+
+# with open("report.html", "w") as f:
+#     f.write(h)
+#     f.close()
+
 
 
 

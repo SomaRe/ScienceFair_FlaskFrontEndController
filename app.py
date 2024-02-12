@@ -33,10 +33,15 @@ def save_data_to_file():
     results[str(datetime.datetime.now())] = data
     try:
         results = test_questions.process_mmse_report(results)
+        results_html = test_questions.generate_html(results)
     except Exception as e:
         print(f"Error: {e}")
+
+
     with open('reports/' + folder_name + '/results.json', 'w') as f:
         json.dump(results, f, indent=4)
+    with open('reports/' + folder_name + '/results.html', 'w') as f:
+        f.write(results_html)
     with open('reports/' + folder_name + '/drawing.png', 'wb') as f:
         f.write(drawing_data)
 
