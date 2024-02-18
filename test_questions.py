@@ -271,7 +271,7 @@ def generate_html(data):
         for section, details in sections.items():
             if section == "drawing":
                 html_content += f'<div class="border-b pb-4"><h2 class="text-xl font-semibold text-gray-700">{section}</h2>'
-                html_content += f'<p><strong>Score:</strong> {details['score']}</p>'
+                html_content += f'<p><strong>Score:</strong> {details["score"]}</p>'
                 html_content += f'<p><strong>Description:</strong> {details["description"]}</p>'
                 # image
                 html_content += f'<img src="{'drawing.png'}" alt="Drawing" class="mt-4">'
