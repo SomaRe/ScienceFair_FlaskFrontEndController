@@ -269,12 +269,19 @@ def generate_html(data):
     
     for date, sections in data.items():
         for section, details in sections.items():
+            if section == "drawing":
+                html_content += f'<div class="border-b pb-4"><h2 class="text-xl font-semibold text-gray-700">{section}</h2>'
+                html_content += f'<p><strong>Score:</strong> {details['score']}</p>'
+                html_content += f'<p><strong>Description:</strong> {details["description"]}</p>'
+                # image
+                html_content += f'<img src="{'drawing.png'}" alt="Drawing" class="mt-4">'
+                html_content += '</div>'
             if section == "total_score":
                 html_content += f'<div class="mt-4"><h3 class="text-lg font-semibold text-gray-700">Total Score: {details}</h3></div>'
             else:
                 html_content += f'<div class="border-b pb-4"><h2 class="text-xl font-semibold text-gray-700">{section}</h2>'
                 for key, value in details.items():
-                    if key not in ['score', 'description']:  # Adjust based on your JSON structure
+                    if key not in ['score', 'description']:  # Adjust based on JSON structure
                         html_content += f'<p><strong>{key.capitalize()}:</strong> {value}</p>'
                 if 'score' in details:
                     html_content += f'<p><strong>Score:</strong> {details["score"]}</p>'
