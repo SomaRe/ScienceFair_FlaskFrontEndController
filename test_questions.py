@@ -274,9 +274,9 @@ def generate_html(data):
                 html_content += f'<p><strong>Score:</strong> {details["score"]}</p>'
                 html_content += f'<p><strong>Description:</strong> {details["description"]}</p>'
                 # image
-                html_content += f'<img src="{'drawing.png'}" alt="Drawing" class="mt-4">'
+                html_content += f'<img src="{"drawing.png"}" alt="Drawing" class="mt-4">'
                 html_content += '</div>'
-            if section == "total_score":
+            elif section == "total_score":
                 html_content += f'<div class="mt-4"><h3 class="text-lg font-semibold text-gray-700">Total Score: {details}</h3></div>'
             else:
                 html_content += f'<div class="border-b pb-4"><h2 class="text-xl font-semibold text-gray-700">{section}</h2>'
