@@ -337,7 +337,13 @@ function saveCanvasAsImage() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({dataURL: dataURL})
-    })
+    }).then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+
+    document.querySelector('.spinner-border').classList.remove('no-display')
+    document.getElementById('view-report-btn').href = data['file_path']
+} );
 }
 
 // Download URI Function

@@ -45,6 +45,8 @@ def save_data_to_file():
     with open('reports/' + folder_name + '/drawing.png', 'wb') as f:
         f.write(drawing_data)
 
+    return os.path.abspath(os.getcwd() + '/reports/' + folder_name + '/results.html')
+
 def read_config_file():
     config_path = 'config.json'
     if not os.path.exists(config_path):
@@ -335,14 +337,15 @@ def group10():
             }
             
             if config['enable_save_data']:
-                save_data_to_file()
-
+                file_path = save_data_to_file()
+                data['file_path'] = file_path
             return jsonify(data)
         else:
             return jsonify({"status": "GET request not supported"})
     else:
         if config['enable_save_data']:
-            save_data_to_file()
+            file_path = save_data_to_file()
+            data['file_path'] = file_path
         return jsonify({"status": "group10 is disabled"})
 
 

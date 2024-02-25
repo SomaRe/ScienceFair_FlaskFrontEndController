@@ -211,7 +211,7 @@ def process_report(report):
             needs_scoring = True
             spoken_text = value.get('spoken_text', '').strip()
             correct_answer = value.get('correct')
-            prompt = f"Score the response '{spoken_text.lower()}' against the correct answer '{correct_answer.lower()}' with 1 or 0. Be liberal in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording the punctuation is not important, but the words are important"
+            prompt = f"Score the response '{spoken_text.lower()}' against the correct answer '{correct_answer.lower()}' with 1 or 0. Be liberal in scoring, if the answer is close to correct, give it a 1. as this is taken from voice recording the punctuation is not important, but the words are important, that is it should have if, and, but. they might be with a 's' like ifs, ands, buts, but it should be there in some form or another, even if one of them is missing give 0."
 
         elif key == "words":
             needs_scoring = True
