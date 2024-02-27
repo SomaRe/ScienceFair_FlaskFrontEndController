@@ -6,6 +6,8 @@ const clockContainer = document.getElementById("clock-container");
 const drawContainer = document.getElementById("draw-container");
 const endContainer = document.getElementById("end-container");
 
+const viewReportBtn = document.getElementById("view-report-btn");
+
 // Clock!
 
 const hourHand = document.getElementById("hourHand");
@@ -73,7 +75,6 @@ document.getElementById("start-btn").onclick = () => {
         });
     }
     clearCanvas();
-
 };
 
 function group2() {
@@ -341,10 +342,26 @@ function saveCanvasAsImage() {
     .then((data) => {
         console.log(data);
 
-    document.querySelector('.spinner-border').classList.remove('no-display')
-    document.getElementById('view-report-btn').href = data['file_path']
-} );
+    document.querySelector('.spinner-border').classList.add('no-display')
+    document.getElementById('view-report-btn').dataset.folderName = data['folder_name']
+});
 }
+
+viewReportBtn.addEventListener('click', () => {
+    folderName = viewReportBtn.dataset.folderName
+    fetch("/open_report", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({folderName: folderName})
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+});
+
 
 // Download URI Function
 function downloadURI(data, filename) {

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import test_questions
 import text_and_speech
 import subprocess
+import webbrowser
 import json
 import time
 import random
@@ -45,7 +46,9 @@ def save_data_to_file():
     with open('reports/' + folder_name + '/drawing.png', 'wb') as f:
         f.write(drawing_data)
 
-    return os.path.abspath(os.getcwd() + '/reports/' + folder_name + '/results.html')
+    return folder_name
+
+
 
 def read_config_file():
     config_path = 'config.json'
@@ -80,6 +83,14 @@ def speak(text, default_model = "gTTS"):
 def index():
     data.clear()
     return render_template('index.html')
+
+@app.route('/open_report', methods=['POST'])
+def open_report():
+    # Get folder name from the request
+    folder_name = request.get_json()['folderName']
+    file_path = os.path.join(os.getcwd(), 'reports', folder_name, 'results.html')
+    # Use webbrowser to open the file
+    webbrowser.open(file_path)
 
 @app.route('/start', methods=['POST', 'GET'])
 def start():
@@ -337,15 +348,15 @@ def group10():
             }
             
             if config['enable_save_data']:
-                file_path = save_data_to_file()
-                data['file_path'] = file_path
+                folder_name = save_data_to_file()
+                data['folder_name'] = folder_name
             return jsonify(data)
         else:
             return jsonify({"status": "GET request not supported"})
     else:
         if config['enable_save_data']:
-            file_path = save_data_to_file()
-            data['file_path'] = file_path
+            folder_name = save_data_to_file()
+            data['folder_name'] = folder_name
         return jsonify({"status": "group10 is disabled"})
 
 
