@@ -27,7 +27,7 @@ def save_data_to_file():
     if not os.path.exists('reports'):
         os.mkdir('reports')
     
-    os.mkdir('reports/' + folder_name)
+    os.mkdir('reports/' + data['name'] + '_' + folder_name)
 
     # step2: save the data in that folder
     results = {}
